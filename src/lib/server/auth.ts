@@ -1,15 +1,15 @@
 import {
-	DATABASE_URL,
 	DISCORD_CLIENT_ID,
 	DISCORD_CLIENT_SECRET,
 } from "$env/static/private";
 import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
-
-const db = new Database(DATABASE_URL);
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "./db";
 
 export const auth = betterAuth({
-	database: db,
+	database: drizzleAdapter(db, {
+		provider: "sqlite",
+	}),
 	socialProviders: {
 		discord: {
 			clientId: DISCORD_CLIENT_ID as string,
