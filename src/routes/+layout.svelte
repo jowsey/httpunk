@@ -1,18 +1,49 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
 	import { authClient } from '$lib/auth-client';
 	import NavButton from '$lib/components/NavButton.svelte';
 
 	const session = authClient.useSession();
 
 	let { children } = $props();
+
+	onMount(() => {
+		const wsUrl = dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`;
+		console.log(`connecting to ${wsUrl}`);
+
+		const ws = new WebSocket(wsUrl);
+		console.log('ws created', ws);
+
+		ws.onopen = () => {
+			console.log('ws connected');
+		};
+
+		ws.onmessage = (event) => {
+			console.log('message from server:', event.data);
+		};
+
+		ws.onerror = (error) => {
+			console.error('ws error:', error);
+		};
+
+		ws.onclose = () => {
+			console.log('ws connection closed');
+		};
+
+		return () => {
+			console.log('closing ws connection');
+			ws.close();
+		};
+	});
 </script>
 
 <svelte:head>
 	<title>httpunk</title>
 </svelte:head>
 
-<div class="fixed bottom-0 flex h-12 w-screen items-center justify-end gap-x-8 px-4">
+<div class="fixed bottom-0 flex h-12 w-screen items-center justify-end gap-x-8 px-4 select-none">
 	<a class="hover:text-brand hover:italic" href="/">httpunk</a>
 
 	<div class="flex items-center gap-x-2">

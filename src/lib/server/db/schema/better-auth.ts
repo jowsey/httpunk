@@ -1,6 +1,5 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-// BetterAuth schema, generated with `bunx @better-auth/cli@latest generate`
 export const user = sqliteTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),

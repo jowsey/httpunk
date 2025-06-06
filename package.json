@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "concurrently \"bun run --watch src/lib/server/standalone.ts\" \"bun --bun run vite dev\"",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -25,6 +25,7 @@
 		"@tailwindcss/vite": "^4.1.8",
 		"@types/bun": "^1.2.15",
 		"@types/node": "^22.15.30",
+		"concurrently": "^9.1.2",
 		"drizzle-kit": "^0.31.1",
 		"eslint": "^9.28.0",
 		"eslint-config-prettier": "^10.1.5",
