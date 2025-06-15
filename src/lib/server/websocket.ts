@@ -1,10 +1,19 @@
+import { auth } from './auth';
+
 const server = Bun.serve({
 	port: 3002,
-	fetch(req, server) {
+	async fetch(req, server) {
 		const url = new URL(req.url);
 		console.log(`[srv] request received: ${req.method} ${req.url} (${url.pathname})`);
 
 		if (url.pathname === '/api/ws') {
+			const session = await auth.api.getSession({ headers: req.headers });
+			console.log('[srv] session:', session);
+			if (!session) {
+				console.warn('[srv] no session found, returning 401');
+				return new Response('Unauthorized', { status: 401 });
+			}
+
 			if (server.upgrade(req)) {
 				console.log('[srv] ws upgrade successful');
 				return;
