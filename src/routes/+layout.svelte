@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../app.css';
-	const { children } = $props();
+	import type { LayoutProps } from './$types';
+
+	const { children, data }: LayoutProps = $props();
 </script>
 
 <svelte:head>

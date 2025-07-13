@@ -1,6 +1,22 @@
 import { auth } from '$lib/server/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
+import { redirect } from '@sveltejs/kit';
 
 export async function handle({ event, resolve }) {
-	return svelteKitHandler({ event, resolve, auth });
+	const session = await auth.api.getSession({
+		headers: event.request.headers
+	});
+
+	event.locals.session = session;
+
+	if (event.route.id === '/' && session) {
+		throw redirect(302, '/home');
+	}
+
+	if (event.route.id?.includes('(game)') && !session) {
+		throw redirect(302, '/');
+	}
+
+	const response = svelteKitHandler({ event, resolve, auth });
+	return response;
 }
