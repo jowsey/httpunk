@@ -10,11 +10,11 @@ export async function handle({ event, resolve }) {
 	event.locals.session = session;
 
 	if (event.route.id === '/' && session) {
-		throw redirect(302, '/home');
+		throw redirect(303, '/home');
 	}
 
 	if (event.route.id?.includes('(game)') && !session) {
-		throw redirect(302, '/');
+		throw redirect(303, '/');
 	}
 
 	const response = svelteKitHandler({ event, resolve, auth });

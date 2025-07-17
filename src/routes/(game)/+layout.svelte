@@ -7,29 +7,28 @@
 
 	onMount(() => {
 		const wsUrl = dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`;
-		console.log(`connecting to ${wsUrl}`);
+		console.log(`Connecting to ${wsUrl}`);
 
 		const ws = new WebSocket(wsUrl);
-		console.log('ws created', ws);
 
 		ws.onopen = () => {
-			console.log('ws connected');
+			console.log('WS connected');
 		};
 
 		ws.onmessage = (event) => {
-			console.log('message from server:', event.data);
+			console.log('WS message:', event.data);
 		};
 
 		ws.onerror = (error) => {
-			console.error('ws error:', error);
+			console.error('WS error:', error);
 		};
 
 		ws.onclose = () => {
-			console.log('ws connection closed');
+			console.log('WS connection closed');
 		};
 
 		return () => {
-			console.log('closing ws connection');
+			console.log('Closing WS connection');
 			ws.close();
 		};
 	});
