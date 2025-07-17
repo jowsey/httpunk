@@ -1,4 +1,7 @@
+import { eq } from 'drizzle-orm';
 import { auth } from './auth';
+import { db } from './db';
+import * as schema from './db/schema';
 
 const path = '/api/ws';
 
@@ -41,6 +44,15 @@ const server = Bun.serve<{ token: string; userId: string }, object>({
 	},
 	websocket: {
 		async open(ws) {
+			const user = (await db.select().from(schema.user).where(eq(schema.user.id, ws.data.userId)))[0];
+			if (!user) {
+				console.log(`User with ID ${ws.data.userId} not found, closing connection`);
+				ws.close();
+				return;
+			} else {
+				console.log(`User with ID ${ws.data.userId} found: ${user}`);
+			}
+
 			console.log(`connection opened to user ${ws.data.userId}`);
 			ws.send('wsg brah');
 		},

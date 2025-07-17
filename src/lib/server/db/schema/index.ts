@@ -1,5 +1,7 @@
 import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
+export * from './better-auth';
+
 export const character = sqliteTable('character', {
 	id: text('id').primaryKey(),
 	name: text('name').notNull(),
