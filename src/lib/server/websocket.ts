@@ -2,24 +2,32 @@ import { auth } from './auth';
 
 const path = '/api/ws';
 
-const server = Bun.serve<{ session: App.Locals['session'] }, object>({
+const server = Bun.serve<{ token: string; userId: string }, object>({
 	port: 3002,
 	async fetch(req, server) {
 		const url = new URL(req.url);
 		console.log(`request received: ${req.method} ${req.url} (${url.pathname})`);
 
 		if (url.pathname === path) {
-			console.log(`Cookie: ${req.headers.get('cookie')}`);
-			const session = await auth.api.getSession({ headers: req.headers });
+			const token = url.searchParams.get('token');
+			console.log(`WebSocket request with token: ${token}`);
+			if (!token) {
+				console.log('No token provided, returning 401');
+				return new Response('Unauthorized', { status: 401 });
+			}
+
+			const session = await auth.api.verifyOneTimeToken({
+				body: { token }
+			});
+
 			console.log(`user.name: ${session?.user?.name}`);
-			console.log('session: ', session);
 
 			if (!session) {
 				console.log('no session found, returning 401');
 				return new Response('Unauthorized', { status: 401 });
 			}
 
-			if (server.upgrade(req, { data: { session } })) {
+			if (server.upgrade(req, { data: { token: session.session.token, userId: session.user.id } })) {
 				console.log('ws upgrade successful');
 				return;
 			} else {
@@ -32,8 +40,8 @@ const server = Bun.serve<{ session: App.Locals['session'] }, object>({
 		return new Response('Not Found', { status: 404 });
 	},
 	websocket: {
-		open(ws) {
-			console.log(`connection opened to user ${ws.data.session?.user.name}`);
+		async open(ws) {
+			console.log(`connection opened to user ${ws.data.userId}`);
 			ws.send('wsg brah');
 		},
 		message(ws, message) {

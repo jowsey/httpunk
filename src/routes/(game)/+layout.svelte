@@ -6,7 +6,12 @@
 	let { children, data } = $props();
 
 	onMount(() => {
-		const wsUrl = dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`;
+		if (!data.websocketToken) {
+			console.error('no websocket token sent? bwah what the hell bwah!!');
+			return;
+		}
+
+		const wsUrl = (dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`) + `?token=${data.websocketToken}`;
 		console.log(`Connecting to ${wsUrl}`);
 
 		const ws = new WebSocket(wsUrl);
