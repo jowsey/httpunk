@@ -1,11 +1,11 @@
 import { eq } from 'drizzle-orm';
-import { auth } from './auth';
-import { db } from './db';
-import * as schema from './db/schema';
+import { auth } from '../auth';
+import { db } from '../db';
+import * as schema from '../db/schema';
 
 const path = '/api/ws';
 
-const server = Bun.serve<{ token: string; userId: string }, object>({
+export const server = Bun.serve<{ token: string; userId: string }, object>({
 	port: 3002,
 	async fetch(req, server) {
 		const url = new URL(req.url);
@@ -66,4 +66,4 @@ const server = Bun.serve<{ token: string; userId: string }, object>({
 	}
 });
 
-console.log(`Server running on ws://localhost:${server.port}${path}`);
+console.log(`Server [${server.development ? 'dev' : 'prod'}] running on ws://localhost:${server.port}${path}`);
