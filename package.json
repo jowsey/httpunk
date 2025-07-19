@@ -29,6 +29,7 @@
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/bun": "^1.2.19",
 		"@types/node": "^24.0.15",
+		"chalk": "^5.4.1",
 		"concurrently": "^9.2.0",
 		"drizzle-kit": "^0.31.4",
 		"eslint": "^9.31.0",

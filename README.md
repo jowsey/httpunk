@@ -30,7 +30,7 @@ bun run db:push
 
 ### dev
 
-Run Vite's dev server & watch the WS backend in parallel:
+Run Vite's dev server & --watch core backend in parallel:
 
 ```sh
 bun run dev
@@ -44,7 +44,7 @@ Build SvelteKit's Node server:
 bun run build
 ```
 
-Run the Node server & WS backend in parallel:
+Run the Node server & core backend in parallel:
 
 ```sh
 bun run prod

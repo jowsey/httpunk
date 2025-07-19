@@ -8,3 +8,4 @@ const client = new Database(process.env.DATABASE_URL);
 client.run('PRAGMA journal_mode = WAL;');
 
 export const db = drizzle(client, { schema });
+export * as schema from './schema';

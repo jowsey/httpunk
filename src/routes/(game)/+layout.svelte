@@ -5,18 +5,22 @@
 
 	let { children, data } = $props();
 
+	let wsState: number | null = $state(null);
+
 	onMount(() => {
 		if (!data.websocketToken) {
 			console.error('no websocket token sent? bwah what the hell bwah!!');
 			return;
 		}
 
-		const wsUrl = (dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`) + `?token=${data.websocketToken}`;
+		const wsUrl =
+			(dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`) + `?token=${data.websocketToken}`;
 		console.log(`Connecting to ${wsUrl}`);
 
 		const ws = new WebSocket(wsUrl);
 
 		ws.onopen = () => {
+			wsState = ws.readyState;
 			console.log('WS connected');
 		};
 
@@ -25,21 +29,27 @@
 		};
 
 		ws.onerror = (error) => {
+			wsState = ws.readyState;
 			console.error('WS error:', error);
 		};
 
 		ws.onclose = () => {
+			wsState = ws.readyState;
 			console.log('WS connection closed');
 		};
 
 		return () => {
 			console.log('Closing WS connection');
-			ws.close();
+			ws?.close();
 		};
 	});
 </script>
 
 <div class="fixed bottom-0 flex h-12 w-screen items-center justify-end gap-x-8 px-4 select-none">
+	<p class="text-sm">
+		WebSocket {#if wsState === WebSocket.OPEN}connected{:else}disconnected{/if}
+	</p>
+
 	<div class="flex items-center gap-x-2">
 		<NavButton href="/home" label="Home"></NavButton>
 		<NavButton href="/character" label="Character"></NavButton>
@@ -48,7 +58,7 @@
 	</div>
 
 	<div
-		class="group hover:bg-brand flex h-8 items-center gap-x-2.5 rounded-full border border-neutral-900 transition-all duration-75 hover:text-black"
+		class="group hover:bg-brand flex h-8 items-center gap-x-2.5 rounded-full border border-neutral-900 bg-neutral-950 transition-all duration-75 hover:text-black"
 	>
 		<a class="flex h-8 cursor-pointer items-center gap-x-2 pl-4" href="/profile">
 			<p>{data.session?.user.name}</p>
@@ -61,6 +71,6 @@
 	</div>
 </div>
 
-<div class="px-6 py-4">
+<div class="min-h-dvh px-6 py-4">
 	{@render children()}
 </div>
