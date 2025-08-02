@@ -53,8 +53,6 @@
 	<div class="flex items-center gap-x-2">
 		<NavButton href="/home" label="Home"></NavButton>
 		<NavButton href="/character" label="Character"></NavButton>
-		<NavButton href="/map" label="Map"></NavButton>
-		<NavButton href="/gigs" label="Gigs"></NavButton>
 	</div>
 
 	<div
