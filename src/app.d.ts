@@ -4,8 +4,8 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			session: import("$lib/server/auth").Session | null;
-			character: typeof import("$lib/server/db").schema.character.$inferSelect | null;
+			session: import('$lib/server/auth').Session | null;
+			character: typeof import('$lib/server/db').schema.character.$inferSelect | null;
 		}
 		// interface PageData {}
 		// interface PageState {}
