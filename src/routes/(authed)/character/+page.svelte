@@ -11,6 +11,6 @@
 	<p class="text-xl font-bold">Name: {data.character!.name}</p>
 
 	<form method="POST" action="?/deleteCharacters" use:enhance>
-		<StyledButton theme="danger" type="submit" class="mt-4">Delete</StyledButton>
+		<StyledButton theme="danger" type="submit" class="mt-4">Delete character</StyledButton>
 	</form>
 </div>

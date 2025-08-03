@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { authClient } from '$lib/auth-client';
+	import StyledButton from '$lib/components/StyledButton.svelte';
 
 	const { data } = $props();
 </script>
@@ -13,13 +14,16 @@
 	</div>
 </div>
 <br />
-<button
-	class="hover:bg-brand h-8 cursor-pointer rounded-full border border-neutral-900 px-4 transition-colors duration-75 hover:text-black"
+
+<StyledButton
+	size="compact"
+	theme="danger"
 	onclick={async () => {
 		await authClient.signOut();
 		goto('/');
 	}}
 >
 	Log out
-</button>
+</StyledButton>
+
 <p class="mt-2 text-sm text-neutral-500">Your progress will be saved.</p>

@@ -54,9 +54,7 @@
 	<title>httpunk</title>
 </svelte:head>
 
-{#if !data.character}
-	{@render children()}
-{:else}
+{#if data.character}
 	<div class="fixed bottom-0 flex h-12 w-screen items-center justify-end gap-x-8 px-4 select-none">
 		<p class="text-sm">
 			WebSocket {wsState === WebSocket.OPEN ? 'connected' : 'disconnected'}
@@ -80,8 +78,8 @@
 			</a>
 		</div>
 	</div>
-
-	<div class="min-h-dvh px-6 py-4">
-		{@render children()}
-	</div>
 {/if}
+
+<div class="mx-auto min-h-dvh max-w-7xl px-6 py-4">
+	{@render children()}
+</div>
