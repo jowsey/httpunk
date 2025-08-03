@@ -63,12 +63,12 @@
 		</p>
 
 		<div class="flex items-center gap-x-2">
-			<NavButton href="/" label="Dashboard"></NavButton>
-			<NavButton href="/character" label="Character"></NavButton>
+			<NavButton icon="/svg/squares-four-fill.svg" href="/" label="Dashboard" />
+			<NavButton icon="/svg/person-arms-spread-fill.svg" href="/character" label="Character" />
 		</div>
 
 		<div
-			class="group hover:bg-brand flex h-8 items-center gap-x-2.5 rounded-full border border-neutral-900 bg-neutral-950 transition-all duration-75 hover:text-black"
+			class="group hover:bg-brand flex h-8 items-center gap-x-2.5 rounded-full border border-neutral-900 bg-neutral-950 transition-all duration-75 hover:text-neutral-900"
 		>
 			<a class="flex h-8 cursor-pointer items-center gap-x-2 pl-4" href="/profile">
 				<p>{data.session?.user.name}</p>
