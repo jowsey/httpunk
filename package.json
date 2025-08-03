@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"build": "bun --bun run vite build",
-		"dev": "NODE_ENV=development concurrently --names \"core,vite\" \"bun --watch run src/lib/server/core\" \"bun --bun run vite dev\"",
+		"dev": "NODE_ENV=development concurrently --names \"core,vite\" \"bun --watch run src/lib/server/core\" \"bun --bun run vite dev --host\"",
 		"prod": "NODE_ENV=production concurrently --names \"core,web\" \"bun run src/lib/server/core\" \"bun --bun run ./build/\"",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",

@@ -1,12 +1,87 @@
 <script lang="ts">
 	import '../app.css';
 	import type { LayoutProps } from './$types';
+	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+	import NavButton from '$lib/components/NavButton.svelte';
 
 	const { children, data }: LayoutProps = $props();
+
+	let wsState: number | null = $state(null);
+
+	onMount(() => {
+		if (!data.character) {
+			return;
+		}
+
+		if (!data.wsToken) {
+			console.error('no websocket token sent? bwah what the hell bwah!!');
+			return;
+		}
+
+		const url = (dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`) + `?token=${data.wsToken}`;
+		console.log(`Connecting to ${url}`);
+
+		const ws = new WebSocket(url);
+
+		ws.onopen = () => {
+			wsState = ws.readyState;
+			console.log('WS connected');
+		};
+
+		ws.onmessage = (event) => {
+			console.log('WS message:', event.data);
+		};
+
+		ws.onerror = (error) => {
+			wsState = ws.readyState;
+			console.error('WS error:', error);
+		};
+
+		ws.onclose = () => {
+			wsState = ws.readyState;
+			console.log('WS connection closed');
+		};
+
+		return () => {
+			console.log('Closing WS connection');
+			ws?.close();
+		};
+	});
 </script>
 
 <svelte:head>
 	<title>httpunk</title>
 </svelte:head>
 
-{@render children()}
+{#if !data.character}
+	{@render children()}
+{:else}
+	<div class="fixed bottom-0 flex h-12 w-screen items-center justify-end gap-x-8 px-4 select-none">
+		<p class="text-sm">
+			WebSocket {wsState === WebSocket.OPEN ? 'connected' : 'disconnected'}
+		</p>
+
+		<div class="flex items-center gap-x-2">
+			<NavButton href="/" label="Dashboard"></NavButton>
+			<NavButton href="/character" label="Character"></NavButton>
+		</div>
+
+		<div
+			class="group hover:bg-brand flex h-8 items-center gap-x-2.5 rounded-full border border-neutral-900 bg-neutral-950 transition-all duration-75 hover:text-black"
+		>
+			<a class="flex h-8 cursor-pointer items-center gap-x-2 pl-4" href="/profile">
+				<p>{data.session?.user.name}</p>
+				<img
+					class="mr-0.5 size-7 rounded-full border border-transparent transition-colors group-hover:border-neutral-950"
+					src={data.session?.user.image}
+					alt="Profile icon"
+				/>
+			</a>
+		</div>
+	</div>
+
+	<div class="min-h-dvh px-6 py-4">
+		{@render children()}
+	</div>
+{/if}
