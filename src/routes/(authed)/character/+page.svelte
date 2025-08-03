@@ -8,7 +8,6 @@
 <div class="mx-auto max-w-7xl">
 	<p class="text-3xl font-bold">Character</p>
 
-	<!-- todo figure out best way to make data.character existing type-safe -->
 	<p class="text-xl font-bold">Name: {data.character!.name}</p>
 
 	<form method="POST" action="?/deleteCharacters" use:enhance>

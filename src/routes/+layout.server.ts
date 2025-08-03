@@ -30,7 +30,7 @@ export const load: LayoutServerLoad = async ({ request, locals, url }) => {
 
 	return {
 		session: locals.session,
-		character: characters.length ? characters[0] : undefined,
+		character: characters.at(0),
 		wsToken
 	};
 };
