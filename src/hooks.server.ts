@@ -10,7 +10,7 @@ export async function handle({ event, resolve }) {
 
 	event.locals.session = session;
 
-	if (event.route.id?.includes('(authed') && !session) {
+	if (event.route.id?.includes('(game)') && !session) {
 		console.warn(`Unauthed access to ${event.route.id}`);
 		throw redirect(303, '/');
 	}

@@ -5,4 +5,7 @@
 	--color-brand: var(--color-amber-300);
 	--color-brand-danger: var(--color-red-400);
 	--color-brand-good: var(--color-green-400);
+	--color-brand-masc: var(--color-blue-400);
+	--color-brand-nb: var(--color-purple-400);
+	--color-brand-fem: var(--color-pink-400);
 }

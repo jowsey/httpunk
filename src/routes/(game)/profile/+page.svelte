@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { authClient } from '$lib/auth-client';
 	import StyledButton from '$lib/components/StyledButton.svelte';
 
@@ -20,6 +20,7 @@
 	theme="danger"
 	onclick={async () => {
 		await authClient.signOut();
+		await invalidate("app:session");  // /+layout.server.ts depends on this
 		goto('/');
 	}}
 >

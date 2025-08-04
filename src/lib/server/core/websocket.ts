@@ -4,8 +4,7 @@ import { db, schema } from '../db';
 import chalk from 'chalk';
 
 const path = '/api/ws';
-
-export const server = Bun.serve<{ userId: string }, object>({
+export const wsServer = Bun.serve<{ userId: string }, object>({
 	port: 3002,
 	async fetch(req, server) {
 		const url = new URL(req.url);
@@ -64,4 +63,4 @@ export const server = Bun.serve<{ userId: string }, object>({
 	}
 });
 
-console.log(`Server [${server.development ? 'dev' : 'prod'}] running on ws://localhost:${server.port}${path}`);
+console.log(`Websocket running on ws://localhost:${wsServer.port}${path} [${wsServer.development ? 'dev' : 'prod'}]`);
