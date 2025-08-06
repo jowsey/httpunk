@@ -5,8 +5,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "bun --bun run vite build",
-		"dev": "docker compose up -d && NODE_ENV=development concurrently --names \"core,vite,valkey\" \"bun --watch run src/lib/server/core\" \"bun --bun run vite dev --host\"",
-		"prod": "docker compose up -d && NODE_ENV=production concurrently --names \"core,web,valkey\" \"bun run src/lib/server/core\" \"bun --bun run ./build/\"",
+		"dev": "docker compose up -d && NODE_ENV=development concurrently --names \"core,vite\" \"bun --watch run src/lib/server/core\" \"bun --bun run vite dev --host\"",
+		"prod": "docker compose up -d && NODE_ENV=production concurrently --names \"core,web\" \"bun run src/lib/server/core\" \"bun --bun run ./build/\"",
 		"preview": "vite preview",
 		"prepare": "bun svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
