@@ -1,11 +1,10 @@
-import dayjs from 'dayjs';
+import { wsServer } from './websocket';
 
 class GameServer {
-	public Time: dayjs.Dayjs;
+	public WsServer = wsServer;
 
-	constructor(time: dayjs.Dayjs) {
+	constructor() {
 		// todo: simulate all time from world's saved time to current time (instantly progress actions that take time, etc)
-		this.Time = time;
 	}
 }
 

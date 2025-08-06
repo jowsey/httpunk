@@ -3,7 +3,7 @@ import { user } from './better-auth';
 export * from './better-auth';
 
 export const worldState = sqliteTable('world_state', {
-	time: integer('time').notNull()
+	updatedAt: integer('updated_at').notNull()
 });
 
 export const character = sqliteTable(
@@ -14,7 +14,12 @@ export const character = sqliteTable(
 			.notNull()
 			.references(() => user.id),
 		name: text('name').notNull(),
-		pronouns: text('pronouns', { enum: ['he', 'they', 'she'] }).notNull()
+		pronouns: text('pronouns', { enum: ['he', 'they', 'she'] }).notNull(),
+		level: integer('level').notNull().default(1),
+		exp: integer('exp').notNull().default(0),
+		createdAt: integer('created_at')
+			.notNull()
+			.$defaultFn(() => Date.now())
 	}
 	// (table) => [check('pronouns_check1', sql`${table.pronouns} IN ('he', 'they', 'she')`)] // db:push sorta breaks with any of these checks rn, todo fix
 );

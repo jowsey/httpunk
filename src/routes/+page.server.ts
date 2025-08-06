@@ -1,4 +1,4 @@
-import { CHARACTER_NAME_REGEX, MAX_CHARACTER_NAME_LENGTH } from '$lib';
+import { CHARACTER_NAME_REGEX, MAX_CHARACTER_NAME_LENGTH } from '$lib/constants';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { auth } from '$lib/server/auth';
 import { db, schema } from '$lib/server/db';
@@ -37,7 +37,7 @@ export const actions = {
 			console.warn('Unauthed attempt to create character');
 			console.dir({ headers: request.headers });
 
-			return redirect(303, '/');
+			throw redirect(303, '/');
 		}
 
 		const existingCharacter = await db
@@ -49,7 +49,7 @@ export const actions = {
 			// maybe if user has multiple tabs open
 			console.warn(`User ${session.user.name} already has a character!`);
 			console.dir({ existingCharacter });
-			return redirect(303, '/character');
+			throw redirect(303, '/character');
 		}
 
 		console.log(`Creating character with name ${name}`);
@@ -64,6 +64,6 @@ export const actions = {
 			.returning();
 
 		console.dir({ newCharacter });
-		return redirect(303, '/character');
+		throw redirect(303, '/character');
 	}
 } satisfies Actions;

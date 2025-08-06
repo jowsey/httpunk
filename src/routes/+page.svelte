@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { CHARACTER_NAME_REGEX, MAX_CHARACTER_NAME_LENGTH } from '$lib';
+	import { CHARACTER_NAME_REGEX, MAX_CHARACTER_NAME_LENGTH } from '$lib/constants';
 	import { authClient } from '$lib/auth-client';
 	import CharacterCreationSection from '$lib/components/CharacterCreationSection.svelte';
 	import StyledInput from '$lib/components/StyledInput.svelte';
@@ -47,15 +47,13 @@
 
 			<div class="mt-4 flex gap-x-2" role="radiogroup" aria-label="Pronouns">
 				<input type="hidden" name="pronouns" value={pronouns} />
-				{#each pronounOptions as option}
+				{#each pronounOptions as option (option.value)}
 					<StyledButton
 						theme={option.theme}
 						size="compact"
 						rounded={option.rounded}
 						selected={pronouns === option.value}
-						onclick={() => {
-							pronouns = option.value;
-						}}
+						onclick={() => (pronouns = option.value)}
 					>
 						{option.label}
 					</StyledButton>

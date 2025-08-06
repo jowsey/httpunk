@@ -1,8 +1,14 @@
+<img alt="httpunk favicon" width="38" src="static/favicon.png" align="right" />
+
 # httpunk
 
-A Cyberpunk-themed web-game built on SvelteKit & Bun.
+A Cyberpunk-themed web-game.
 
-## Setup
+## Developing
+
+### Setup
+
+Ensure you have [Bun](https://bun.sh) and Docker installed.
 
 Install dependencies:
 
@@ -12,7 +18,7 @@ bun install
 
 Populate `.env` based on the `.env.example`
 
-## Database
+### Database
 
 Generate Better Auth's schema files:
 
@@ -26,17 +32,17 @@ Push & migrate schema changes to httpunk.db:
 bun run db:push
 ```
 
-## Running
+### Running
 
-### dev
+#### dev
 
-Run Vite's dev server & --watch core backend in parallel:
+Run the Vite dev server, core backend (--watch), and Valkey container in parallel:
 
 ```sh
 bun run dev
 ```
 
-### production
+#### production
 
 Build SvelteKit's Node server:
 
@@ -44,7 +50,7 @@ Build SvelteKit's Node server:
 bun run build
 ```
 
-Run the Node server & core backend in parallel:
+Run the Node server, core backend, and Valkey container in parallel:
 
 ```sh
 bun run prod

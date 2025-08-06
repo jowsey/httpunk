@@ -2,8 +2,16 @@
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
 	import NavButton from '$lib/components/NavButton.svelte';
+	import { appState } from '$lib/client/state.svelte';
+	import type {
+		CharacterExpUpdateMessage,
+		CharacterLevelUpdateMessage,
+		WebsocketMessage
+	} from '$lib/types/WebsocketMessage';
 
 	const { children, data } = $props();
+
+	appState.character = data.character;
 
 	let wsState: number | null = $state(null);
 
@@ -12,12 +20,7 @@
 			return;
 		}
 
-		if (!data.wsToken) {
-			console.error('no websocket token sent? bwah what the hell bwah!!');
-			return;
-		}
-
-		const url = (dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`) + `?token=${data.wsToken}`;
+		const url = dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`;
 		console.log(`Connecting to ${url}`);
 
 		const ws = new WebSocket(url);
@@ -28,7 +31,32 @@
 		};
 
 		ws.onmessage = (event) => {
-			console.log('WS message:', event.data);
+			console.log('[ws] message:', event.data);
+
+			const msgData = JSON.parse(event.data) as WebsocketMessage;
+			if (!msgData.type) {
+				console.warn('[ws] received message without type:', msgData);
+				return;
+			}
+
+			switch (msgData.type) {
+				case 'characterExpUpdate': {
+					const expUpdate = msgData as CharacterExpUpdateMessage;
+					if (expUpdate.characterId === appState.character?.id) {
+						appState.character.exp = expUpdate.exp;
+					}
+					break;
+				}
+				case 'characterLevelUpdate': {
+					const levelUpdate = msgData as CharacterLevelUpdateMessage;
+					if (levelUpdate.characterId === appState.character?.id) {
+						appState.character.level = levelUpdate.level;
+					}
+					break;
+				}
+				default:
+					console.warn(`[ws] unknown message type: ${msgData.type}`);
+			}
 		};
 
 		ws.onerror = (error) => {
