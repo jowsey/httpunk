@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { db, schema } from '../db';
 import { redisPublisher } from '../redis';
-import { type CharacterExpUpdateEvent, type CharacterLevelUpdateEvent } from '../types/RedisEvent';
+import { type CharacterExpUpdateEvent, type CharacterLevelUpdateEvent } from '../types/redis-event';
 import { EXP_GOAL_FOR_LEVEL } from '$lib/constants';
 
 /**

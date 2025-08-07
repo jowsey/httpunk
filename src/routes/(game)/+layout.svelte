@@ -7,7 +7,7 @@
 		CharacterExpUpdateMessage,
 		CharacterLevelUpdateMessage,
 		WebsocketMessage
-	} from '$lib/types/WebsocketMessage';
+	} from '$lib/shared-types/websocket-message';
 
 	const { children, data } = $props();
 
