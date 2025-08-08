@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
-	import NavButton from '$lib/components/NavButton.svelte';
 	import { appState } from '$lib/client/state.svelte';
 	import type {
 		CharacterExpUpdateMessage,
 		CharacterLevelUpdateMessage,
 		WebsocketMessage
 	} from '$lib/shared-types/websocket-message';
+	import NavButton from '$lib/components/NavButton.svelte';
 
 	const { children, data } = $props();
 
@@ -21,13 +21,13 @@
 		}
 
 		const url = dev ? `ws://localhost:3002/api/ws` : `ws://${window.location.host}/api/ws`;
-		console.log(`Connecting to ${url}`);
+		console.log(`[ws] connecting to ${url}`);
 
 		const ws = new WebSocket(url);
 
 		ws.onopen = () => {
 			wsState = ws.readyState;
-			console.log('WS connected');
+			console.log('[ws] connected');
 		};
 
 		ws.onmessage = (event) => {
