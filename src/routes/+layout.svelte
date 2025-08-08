@@ -8,6 +8,6 @@
 	<title>httpunk</title>
 </svelte:head>
 
-<div class="mx-auto flex min-h-dvh max-w-7xl flex-col px-6 pt-4 pb-8">
+<div class="flex min-h-dvh flex-col">
 	{@render children()}
 </div>

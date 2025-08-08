@@ -64,6 +64,6 @@ export const actions = {
 			.returning();
 
 		console.dir({ newCharacter });
-		throw redirect(303, '/character');
+		throw redirect(303, '/hub');
 	}
 } satisfies Actions;

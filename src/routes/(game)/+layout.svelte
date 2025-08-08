@@ -8,6 +8,7 @@
 		WebsocketMessage
 	} from '$lib/shared-types/websocket-message';
 	import NavButton from '$lib/components/NavButton.svelte';
+	import { page } from '$app/state';
 
 	const { children, data } = $props();
 
@@ -61,45 +62,69 @@
 
 		ws.onerror = (error) => {
 			wsState = ws.readyState;
-			console.error('WS error:', error);
+			console.error('[ws] error:', error);
 		};
 
 		ws.onclose = () => {
 			wsState = ws.readyState;
-			console.log('WS connection closed');
+			console.log('[ws] connection closed');
 		};
 
 		return () => {
-			console.log('Closing WS connection');
+			console.log('[ws] closing connection');
 			ws?.close();
 		};
 	});
 </script>
 
-{#if data.character}
-	<div class="fixed bottom-0 left-0 flex h-12 w-screen items-center justify-end gap-x-8 px-4 select-none">
-		<p class="text-sm">
-			WebSocket {wsState === WebSocket.OPEN ? 'connected' : 'disconnected'}
-		</p>
-
-		<div class="flex items-center gap-x-2">
-			<NavButton icon="/svg/squares-four-fill.svg" href="/hub" label="Hub" />
-			<NavButton icon="/svg/person-arms-spread-fill.svg" href="/character" label="Character" />
-		</div>
-
-		<div
-			class="group hover:bg-brand flex h-8 items-center gap-x-2.5 rounded-full border border-neutral-900 bg-neutral-950 transition-all duration-75 hover:text-neutral-900"
-		>
-			<a class="flex h-8 cursor-pointer items-center gap-x-2 pl-4" href="/profile">
-				<p>{data.session?.user.name}</p>
+<div class="sticky top-0 w-full">
+	<div class="absolute -top-8 left-0 z-50 h-8 w-full shadow-sm shadow-white/25"></div>
+	<div class="relative mb-8 h-8 bg-gradient-to-t from-transparent to-slate-900 px-4">
+		<div class="mx-auto flex h-full max-w-7xl items-center justify-between pt-0.5">
+			<a href="/hub">
 				<img
-					class="mr-0.5 size-7 rounded-full border border-transparent transition-colors group-hover:border-neutral-950"
-					src={data.session?.user.image}
-					alt="Profile icon"
+					src="/favicon.png"
+					alt="httpunk logo"
+					class="drop-shadow-brand/25 hover:drop-shadow-brand/75 size-6 drop-shadow-sm"
 				/>
 			</a>
+			<p class="drop-shadow-sm drop-shadow-white/25">
+				<a class="hover:underline" href="/character">{appState.character!.name}</a>
+				<span class="mx-2 opacity-50">•</span>
+				Lvl. <span class="text-brand drop-shadow-brand/25 drop-shadow-sm">{appState.character!.level}</span>
+			</p>
 		</div>
 	</div>
-{/if}
+</div>
 
-{@render children()}
+<div class="mx-auto mb-8 w-full max-w-7xl px-2 sm:px-4">
+	{@render children()}
+</div>
+
+<div class="fixed right-0 bottom-0 flex h-12 items-center justify-end gap-x-4 select-none">
+	<p class="text-sm">
+		ws {wsState === WebSocket.OPEN ? 'connected' : 'disconnected'}
+	</p>
+
+	<div class="flex items-center gap-x-2">
+		<NavButton icon="/svg/squares-four-fill.svg" href="/hub" label="Hub" />
+		<NavButton icon="/svg/person-arms-spread-fill.svg" href="/character" label="Character" />
+	</div>
+
+	<a
+		class={[
+			'group hover:bg-brand flex h-8 items-center justify-center gap-x-2 rounded-full border border-neutral-900 bg-neutral-950 px-[1px] transition-all duration-75 hover:text-neutral-900',
+			page.url.pathname === '/profile' && '!bg-brand !text-neutral-900'
+		]}
+		href="/profile"
+	>
+		<p class="pl-3.5 max-sm:hidden">{data.session?.user.name}</p>
+		<div class="size-7">
+			<img
+				class="size-full rounded-full border border-transparent transition-transform group-hover:scale-110"
+				src={data.session?.user.image}
+				alt="Profile icon"
+			/>
+		</div>
+	</a>
+</div>
