@@ -26,7 +26,7 @@
 		<PronounTag pronoun={appState.character!.pronouns} />
 	</p>
 	<div class="flex flex-col lg:col-span-2">
-		<div class="flex items-center justify-between">
+		<div class="flex items-center justify-between tabular-nums">
 			<p class="font-bold">Level <span class="text-brand">{appState.character!.level}</span></p>
 			<p class="text-sm text-neutral-400">
 				EXP: {appState.character!.exp} / {EXP_GOAL_FOR_LEVEL(appState.character!.level)}
