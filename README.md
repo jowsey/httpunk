@@ -1,8 +1,10 @@
-<img alt="httpunk favicon" width="38" src="static/favicon.png" align="right" />
+<div align="center">
+<img alt="httpunk favicon" src=".github/httpunk-banner.png" align="center" />
+<br />
 
-# httpunk
-
-A Cyberpunk-themed web-game.
+<h1>httpunk</h1>
+<p>A Cyberpunk-themed web-game.</p>
+</div>
 
 ## Setup
 
@@ -10,7 +12,7 @@ A Cyberpunk-themed web-game.
 
 2. Install dependencies
 
-```sh
+```console
 bun install
 ```
 
@@ -20,7 +22,7 @@ bun install
 
 5. Push the initial database schema to `httpunk.db`
 
-```sh
+```console
 bun run db:push
 ```
 
@@ -28,7 +30,7 @@ bun run db:push
 
 Run the Vite dev server, core backend (--watch), and Valkey container in parallel:
 
-```sh
+```console
 bun run dev
 ```
 
@@ -36,13 +38,13 @@ bun run dev
 
 Generate Better Auth's schema files:
 
-```sh
+```console
 bun run better-auth:generate
 ```
 
 Push & migrate schema changes to httpunk.db:
 
-```sh
+```console
 bun run db:push
 ```
 
@@ -50,12 +52,12 @@ bun run db:push
 
 Build SvelteKit's Node server:
 
-```sh
+```console
 bun run build
 ```
 
 Run the Node server, core backend, and Valkey container in parallel:
 
-```sh
+```console
 bun run prod
 ```
