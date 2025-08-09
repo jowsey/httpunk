@@ -9,8 +9,3 @@
 	--color-brand-nb: var(--color-purple-400);
 	--color-brand-fem: var(--color-pink-400);
 }
-
-* {
-	scrollbar-gutter: stable;
-	scrollbar-width: thin;
-}

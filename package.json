@@ -31,7 +31,7 @@
 		"@types/node": "^24.2.1",
 		"concurrently": "^9.2.0",
 		"drizzle-kit": "^0.31.4",
-		"eslint": "^9.32.0",
+		"eslint": "^9.33.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.11.0",
 		"globals": "^16.3.0",
@@ -51,6 +51,7 @@
 		"chalk": "^5.5.0",
 		"dayjs": "^1.11.13",
 		"drizzle-orm": "^0.44.4",
+		"overlayscrollbars-svelte": "^0.5.5",
 		"redis": "^5.8.0"
 	},
 	"trustedDependencies": [

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
+	import { page } from '$app/state';
 	import { appState } from '$lib/client/state.svelte';
 	import type {
 		CharacterExpUpdateMessage,
@@ -8,7 +9,9 @@
 		WebsocketMessage
 	} from '$lib/shared-types/websocket-message';
 	import NavButton from '$lib/components/NavButton.svelte';
-	import { page } from '$app/state';
+
+	import 'overlayscrollbars/overlayscrollbars.css';
+	import { OverlayScrollbarsComponent } from 'overlayscrollbars-svelte';
 
 	const { children, data } = $props();
 
@@ -77,31 +80,45 @@
 	});
 </script>
 
-<div class="sticky top-0 w-full">
+<!-- top header -->
+<div class="fixed top-0 z-40 w-full">
 	<div class="absolute -top-8 left-0 z-50 h-8 w-full shadow-sm shadow-white/25"></div>
-	<div class="relative mb-8 h-8 bg-gradient-to-t from-transparent to-slate-900 px-4">
-		<div class="mx-auto flex h-full max-w-7xl items-center justify-between pt-0.5">
-			<a href="/hub">
-				<img
-					src="/favicon.png"
-					alt="httpunk logo"
-					class="drop-shadow-brand/25 hover:drop-shadow-brand/75 size-6 drop-shadow-sm"
-				/>
-			</a>
-			<p class="drop-shadow-sm drop-shadow-white/25">
-				<a class="hover:underline" href="/character">{appState.character!.name}</a>
-				<span class="mx-2 opacity-50">•</span>
-				Lvl. <span class="text-brand drop-shadow-brand/25 drop-shadow-sm">{appState.character!.level}</span>
-			</p>
+	<div class="relative mb-8 h-8 bg-gradient-to-t from-transparent to-neutral-950 to-25%">
+		<!-- fades content below -->
+		<div class="size-full bg-gradient-to-t from-transparent to-slate-900 px-4">
+			<!-- blue layer -->
+			<div class="mx-auto flex h-full max-w-7xl items-center justify-between pt-0.5">
+				<a href="/hub">
+					<img
+						src="/favicon.png"
+						alt="httpunk logo"
+						class="drop-shadow-brand/25 hover:drop-shadow-brand/75 size-6 drop-shadow-sm"
+					/>
+				</a>
+
+				<!-- player details -->
+				<p class="drop-shadow-sm drop-shadow-white/25">
+					<a class="hover:underline" href="/character">{appState.character!.name}</a>
+					<span class="mx-2 opacity-50">•</span>
+					Lvl. <span class="text-brand drop-shadow-brand/25 drop-shadow-sm">{appState.character!.level}</span>
+				</p>
+			</div>
 		</div>
 	</div>
 </div>
 
-<div class="mx-auto mb-8 w-full max-w-7xl px-2 sm:px-4">
+<!-- main game content -->
+<OverlayScrollbarsComponent
+	options={{ scrollbars: { theme: 'os-theme-light', autoHide: 'move' } }}
+	class="mx-auto h-dvh w-full max-w-7xl overflow-y-auto px-4 py-16"
+>
 	{@render children()}
-</div>
+</OverlayScrollbarsComponent>
 
-<div class="fixed right-0 bottom-0 flex h-12 items-center justify-end gap-x-4 select-none">
+<!-- bottom nav menu -->
+<div
+	class="fixed right-0 bottom-0 flex h-12 w-dvw items-center justify-end gap-x-4 bg-gradient-to-b from-transparent to-neutral-950 px-2 select-none"
+>
 	<p class="text-sm">
 		ws {wsState === WebSocket.OPEN ? 'connected' : 'disconnected'}
 	</p>
