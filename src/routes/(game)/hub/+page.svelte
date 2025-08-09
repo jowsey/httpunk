@@ -28,15 +28,8 @@
 	<HubPanel
 		title="Character"
 		subtitle="View and manage your character"
-		background="https://placewaifu.com/image/200"
+		background="hub/heart_glass_still.webp"
 		class="col-span-1 row-span-2"
 		href="/character"
-	/>
-
-	<HubPanel
-		title="Inventory"
-		subtitle="Manage your items and equipment"
-		background="https://placewaifu.com/image/300"
-		class="col-span-1 row-span-2"
 	/>
 </div>
