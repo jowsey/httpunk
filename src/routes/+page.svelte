@@ -18,7 +18,23 @@
 </script>
 
 <div class="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4">
-	{#if data.session}
+	{#if !data.session}
+		<div class="m-auto w-fit">
+			<p class="hover:text-brand mb-4 cursor-crosshair text-xl font-bold select-none hover:italic">httpunk</p>
+			<button
+				class="focus:bg-brand group hover:border-brand mb-4 flex h-14 cursor-pointer items-center gap-x-4 border border-transparent bg-neutral-900 px-4 hover:bg-neutral-800 focus:border-neutral-950 focus:**:text-neutral-950"
+				onclick={async () => {
+					await authClient.signIn.social({ provider: 'discord', callbackURL: '/hub' });
+				}}
+			>
+				<img class="h-8 group-focus:invert" src="/svg/discord.svg" alt="Discord logo" />
+				<div class="text-left">
+					<p class="font-bold">Join game</p>
+					<p class="-mt-0.5 text-xs text-neutral-500">Requires a Discord account</p>
+				</div>
+			</button>
+		</div>
+	{:else}
 		<div class="mt-16 flex items-center gap-x-4 max-sm:flex-col max-sm:items-start">
 			<img class="size-8" src="/favicon.png" alt="httpunk logo" />
 			<p class="text-3xl font-bold">Welcome, {data.session.user.name}!</p>
@@ -78,21 +94,5 @@
 
 			<StyledButton type="submit" class="mt-4">Create</StyledButton>
 		</form>
-	{:else}
-		<div class="m-auto w-fit">
-			<p class="hover:text-brand mb-4 cursor-crosshair text-xl font-bold select-none hover:italic">httpunk</p>
-			<button
-				class="focus:bg-brand group hover:border-brand mb-4 flex h-14 cursor-pointer items-center gap-x-4 border border-transparent bg-neutral-900 px-4 hover:bg-neutral-800 focus:border-neutral-950 focus:**:text-neutral-950"
-				onclick={async () => {
-					await authClient.signIn.social({ provider: 'discord', callbackURL: '/hub' });
-				}}
-			>
-				<img class="h-8 group-focus:invert" src="/svg/discord.svg" alt="Discord logo" />
-				<div class="text-left">
-					<p class="font-bold">Join game</p>
-					<p class="-mt-0.5 text-xs text-neutral-500">Requires a Discord account</p>
-				</div>
-			</button>
-		</div>
 	{/if}
 </div>
