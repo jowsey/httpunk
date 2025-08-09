@@ -4,19 +4,33 @@
 
 A Cyberpunk-themed web-game.
 
-## Developing
+## Setup
 
-### Setup
+1. Ensure you have [Bun](https://bun.sh) and [Docker](https://www.docker.com/) installed
 
-Ensure you have [Bun](https://bun.sh) and Docker installed.
-
-Install dependencies:
+2. Install dependencies
 
 ```sh
 bun install
 ```
 
-Populate `.env` based on the `.env.example`
+3. Populate a `.env` based on the provided `.env.example`
+
+4. In your Discord application, add an OAuth2 redirect pointing to `<deployment_url>/api/auth/callback/discord`
+
+5. Push the initial database schema to `httpunk.db`
+
+```sh
+bun run db:push
+```
+
+## Development
+
+Run the Vite dev server, core backend (--watch), and Valkey container in parallel:
+
+```sh
+bun run dev
+```
 
 ### Database
 
@@ -32,17 +46,7 @@ Push & migrate schema changes to httpunk.db:
 bun run db:push
 ```
 
-### Running
-
-#### dev
-
-Run the Vite dev server, core backend (--watch), and Valkey container in parallel:
-
-```sh
-bun run dev
-```
-
-#### production
+## Deployment
 
 Build SvelteKit's Node server:
 
