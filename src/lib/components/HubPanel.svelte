@@ -20,7 +20,7 @@
 	onmouseenter={() => (isHovering = true)}
 	onmouseleave={() => (isHovering = false)}
 	class={[
-		'group relative flex cursor-pointer flex-col items-start justify-end rounded-3xl px-6 py-4 inset-ring-2 shadow-black inset-ring-white/25 transition-transform duration-75 select-none hover:-translate-y-0.5 hover:shadow-lg hover:brightness-110 active:brightness-125',
+		'group hover:border-brand relative flex cursor-pointer flex-col items-start justify-end rounded-3xl border-2 border-white/25 px-6 py-4 transition-transform duration-75 select-none hover:-translate-y-0.5 hover:brightness-110 active:brightness-125',
 		attribs.class
 	]}
 >
@@ -28,7 +28,7 @@
 		<img
 			src={backgroundHover && isHovering ? backgroundHover : background}
 			alt="{title} background"
-			class={['absolute inset-0 -z-10 size-full rounded-2xl object-cover']}
+			class={['absolute inset-0 -z-10 size-full rounded-3xl object-cover']}
 		/>
 	{/if}
 
@@ -37,7 +37,7 @@
 	>
 		<p class="text-2xl font-bold lg:text-3xl">{title}</p>
 		{#if subtitle}
-			<p class="text-lg text-neutral-300">{subtitle}</p>
+			<p class="text-lg leading-tight text-neutral-300">{subtitle}</p>
 		{/if}
 	</div>
 </a>
