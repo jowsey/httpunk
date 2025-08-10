@@ -10,7 +10,7 @@ import { EXP_GOAL_FOR_LEVEL } from '$lib/constants';
  * @param exp The amount of experience to apply.
  * @returns The new level and experience of the character.
  */
-export const ApplyExp = async (characterId: number, exp: number) => {
+export const ApplyExp = async (characterId: typeof schema.character.$inferSelect.id, exp: number) => {
 	const characters = await db.select().from(schema.character).where(eq(schema.character.id, characterId)).limit(1);
 	const character = characters.at(0);
 	if (!character) {

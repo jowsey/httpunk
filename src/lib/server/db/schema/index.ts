@@ -1,4 +1,4 @@
-import { pgTable, text, integer, serial, timestamp, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, timestamp, pgEnum, uuid } from 'drizzle-orm/pg-core';
 import { user } from './better-auth';
 export * from './better-auth';
 
@@ -7,7 +7,7 @@ export const pronounsEnum = pgEnum('pronouns', ['he', 'they', 'she']);
 export const character = pgTable(
 	'character',
 	{
-		id: serial('id').primaryKey(),
+		id: uuid('id').primaryKey().defaultRandom(),
 		userId: text('user_id')
 			.notNull()
 			.references(() => user.id),

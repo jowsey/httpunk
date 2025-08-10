@@ -15,7 +15,7 @@ export const actions = {
 		}
 
 		const formData = await request.formData();
-		const characterId = parseInt(formData.get('characterId') as string);
+		const characterId = formData.get('characterId') as string;
 		const exp = parseInt(formData.get('exp') as string);
 
 		// make sure character belongs to user

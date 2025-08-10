@@ -1,5 +1,7 @@
+import type { schema } from '../db';
+
 export interface CharacterEvent {
-	characterId: number;
+	characterId: typeof schema.character.$inferSelect.id;
 }
 
 export interface CharacterExpUpdateEvent extends CharacterEvent {
