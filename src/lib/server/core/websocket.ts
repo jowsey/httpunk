@@ -1,11 +1,11 @@
 import type { CharacterExpUpdateEvent, CharacterLevelUpdateEvent } from '../types/redis-event';
 import type { CharacterExpUpdateMessage, CharacterLevelUpdateMessage } from '$lib/shared-types/websocket-message';
+import { ApplyExp } from '../utils/character';
 import { redisSubscriber } from '../redis';
-import { auth } from '../auth';
 import { db, schema } from '../db';
 import { eq } from 'drizzle-orm';
+import { auth } from '../auth';
 import chalk from 'chalk';
-import { ApplyExp } from '../utils/character';
 
 interface WebSocketData {
 	userId: string;
