@@ -1,11 +1,22 @@
 services:
   valkey:
-    image: valkey/valkey:latest
+    image: valkey/valkey:8
     ports:
       - '6379:6379'
     volumes:
       - valkey_data:/data
     restart: unless-stopped
+  postgres:
+    image: postgres:17
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=httpunk
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   valkey_data:
+  postgres_data:

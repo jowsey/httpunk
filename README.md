@@ -10,7 +10,7 @@
 
 1. Ensure you have [Bun](https://bun.sh) and [Docker](https://www.docker.com/) installed
 
-2. Install dependencies
+2. Install dependencies:
 
 ```console
 bun install
@@ -20,15 +20,17 @@ bun install
 
 4. In your Discord application, add an OAuth2 redirect pointing to `<deployment_url>/api/auth/callback/discord`
 
-5. Push the initial database schema to `httpunk.db`
+5. Initialise Postgres with database schema:
 
 ```console
+docker compose up -d postgres # start Postgres
 bun run db:push
+docker compose stop postgres # optional: stop Postgres for now
 ```
 
 ## Development
 
-Run the Vite dev server, core backend (--watch), and Valkey container in parallel:
+Launch Valkey & Postgres, and run the Vite dev server & core backend (--watch) in parallel:
 
 ```console
 bun run dev
@@ -42,7 +44,7 @@ Generate Better Auth's schema files:
 bun run better-auth:generate
 ```
 
-Push & migrate schema changes to httpunk.db:
+Push & migrate schema changes to Postgres:
 
 ```console
 bun run db:push
@@ -56,7 +58,7 @@ Build SvelteKit's Node server:
 bun run build
 ```
 
-Run the Node server, core backend, and Valkey container in parallel:
+Launch Valkey & Postgres, and run the Node server & core backend in parallel:
 
 ```console
 bun run prod

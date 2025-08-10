@@ -5,9 +5,9 @@ import { db } from './db';
 export const auth = betterAuth({
 	// todo come back to this when better-auth get their shit together
 	// https://www.better-auth.com/docs/integrations/svelte-kit#server-action-cookies
-	// plugins: [sveltekitCookies(getRequestEvent), oneTimeToken()],
+	// plugins: [sveltekitCookies(getRequestEvent)],
 	database: drizzleAdapter(db, {
-		provider: 'sqlite'
+		provider: 'pg'
 	}),
 	socialProviders: {
 		discord: {

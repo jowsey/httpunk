@@ -1,25 +1,21 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { pgTable, text, integer, serial, timestamp, pgEnum } from 'drizzle-orm/pg-core';
 import { user } from './better-auth';
 export * from './better-auth';
 
-export const worldState = sqliteTable('world_state', {
-	updatedAt: integer('updated_at').notNull()
-});
+export const pronounsEnum = pgEnum('pronouns', ['he', 'they', 'she']);
 
-export const character = sqliteTable(
+export const character = pgTable(
 	'character',
 	{
-		id: integer('id').primaryKey({ autoIncrement: true }),
+		id: serial('id').primaryKey(),
 		userId: text('user_id')
 			.notNull()
 			.references(() => user.id),
 		name: text('name').notNull(),
-		pronouns: text('pronouns', { enum: ['he', 'they', 'she'] }).notNull(),
+		pronouns: pronounsEnum().notNull(),
 		level: integer('level').notNull().default(1),
 		exp: integer('exp').notNull().default(0),
-		createdAt: integer('created_at')
-			.notNull()
-			.$defaultFn(() => Date.now())
+		createdAt: timestamp('created_at').notNull().defaultNow()
 	}
 	// (table) => [check('pronouns_check1', sql`${table.pronouns} IN ('he', 'they', 'she')`)] // db:push sorta breaks with any of these checks rn, todo fix
 );
