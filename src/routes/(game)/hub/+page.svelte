@@ -17,13 +17,9 @@
 		class="col-span-2 row-span-2 lg:col-span-3"
 	/>
 
-	<HubPanel
-		title="Weapons"
-		subtitle="Purchase weapons and other gear"
-		background="hub/ar_glass_still.webp"
-		backgroundHover="hub/ar_glass.webp"
-		class="col-span-2 row-span-1 md:col-span-1 lg:col-span-2"
-	/>
+	<div class="col-span-1 row-span-2">
+		<!-- reserved -->
+	</div>
 
 	<HubPanel
 		title="Character"
@@ -31,5 +27,17 @@
 		background="hub/heart_glass_still.webp"
 		class="col-span-1 row-span-2"
 		href="/character"
+	/>
+
+	<div class="col-span-3 row-span-1 max-lg:hidden">
+		<!-- reserved -->
+	</div>
+
+	<HubPanel
+		title="Weapons"
+		subtitle="Purchase weapons and other gear"
+		background="hub/ar_glass_still.webp"
+		backgroundHover="hub/ar_glass.webp"
+		class="col-span-2 row-span-1"
 	/>
 </div>
