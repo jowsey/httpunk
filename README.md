@@ -12,7 +12,7 @@
 
 2. Install dependencies:
 
-```console
+```bash
 bun install
 ```
 
@@ -22,7 +22,7 @@ bun install
 
 5. Initialise Postgres with database schema:
 
-```console
+```bash
 docker compose up -d postgres # start Postgres
 bun run db:push
 docker compose stop postgres # optional: stop Postgres for now
@@ -32,7 +32,7 @@ docker compose stop postgres # optional: stop Postgres for now
 
 Launch Valkey & Postgres, and run the Vite dev server & core backend (--watch) in parallel:
 
-```console
+```bash
 bun run dev
 ```
 
@@ -40,13 +40,13 @@ bun run dev
 
 Generate Better Auth's schema files:
 
-```console
+```bash
 bun run better-auth:generate
 ```
 
 Push & migrate schema changes to Postgres:
 
-```console
+```bash
 bun run db:push
 ```
 
@@ -54,12 +54,12 @@ bun run db:push
 
 Build SvelteKit's Node server:
 
-```console
+```bash
 bun run build
 ```
 
 Launch Valkey & Postgres, and run the Node server & core backend in parallel:
 
-```console
+```bash
 bun run prod
 ```
