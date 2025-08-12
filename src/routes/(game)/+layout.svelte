@@ -12,7 +12,6 @@
 	import NavButton from '$lib/components/NavButton.svelte';
 
 	import 'overlayscrollbars/overlayscrollbars.css';
-	import { OverlayScrollbarsComponent } from 'overlayscrollbars-svelte';
 
 	const { children, data } = $props();
 
