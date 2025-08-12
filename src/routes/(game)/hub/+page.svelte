@@ -12,19 +12,15 @@
 	<HubPanel
 		title="Gigs"
 		subtitle="Contact a fixer to find work"
-		background="hub/briefcase_glass_still.webp"
-		backgroundHover="hub/briefcase_glass.webp"
+		background="render/briefcase_glass.webp"
+		backgroundHover="render/briefcase_glass_animated.webp"
 		class="col-span-2 row-span-2 lg:col-span-3"
 	/>
-
-	<div class="col-span-1 row-span-2">
-		<!-- reserved -->
-	</div>
 
 	<HubPanel
 		title="Character"
 		subtitle="View and manage your character"
-		background="hub/heart_glass_still.webp"
+		background="render/heart_glass.webp"
 		class="col-span-1 row-span-2"
 		href="/character"
 	/>
@@ -36,8 +32,8 @@
 	<HubPanel
 		title="Weapons"
 		subtitle="Purchase weapons and other gear"
-		background="hub/ar_glass_still.webp"
-		backgroundHover="hub/ar_glass.webp"
+		background="render/ar_glass.webp"
+		backgroundHover="render/ar_glass_animated.webp"
 		class="col-span-2 row-span-1"
 	/>
 </div>

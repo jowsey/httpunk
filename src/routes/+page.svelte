@@ -19,6 +19,7 @@
 
 <div class="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4">
 	{#if !data.session}
+		<!-- logged-out landing page -->
 		<div class="m-auto w-60">
 			<div class="mb-4 flex gap-x-4">
 				<img class="size-8" src="/favicon.png" alt="httpunk logo" />
@@ -39,6 +40,7 @@
 			</button>
 		</div>
 	{:else}
+		<!-- character creation -->
 		<div class="mt-16 flex items-center gap-x-4 max-sm:flex-col max-sm:items-start">
 			<img class="size-8" src="/favicon.png" alt="httpunk logo" />
 			<p class="text-3xl font-bold">Welcome, {data.session.user.name}!</p>

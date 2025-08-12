@@ -1,5 +1,9 @@
 import type { CharacterExpUpdateEvent, CharacterLevelUpdateEvent } from '../types/redis-event';
-import type { CharacterExpUpdateMessage, CharacterLevelUpdateMessage } from '$lib/shared-types/websocket-message';
+import {
+	WebsocketMessageType,
+	type CharacterExpUpdateMessage,
+	type CharacterLevelUpdateMessage
+} from '$lib/shared-types/websocket-message';
 import { ApplyExp } from '../utils/character';
 import { redisSubscriber } from '../redis';
 import { db, schema } from '../db';
@@ -11,6 +15,12 @@ interface WebSocketData {
 	userId: string;
 }
 
+// todo:
+// in the (milli)seconds between the web-app sending data to the frontend, and the frontend connecting to the websocket,
+// events triggered won't be sent: at this point, the frontend's data is stale, and we've discarded the event here.
+// maybe buffer events for users that aren't online for at least a short while, and replay them on connect?
+// ^ i wonder if this will need a system to overwrite old events with new ones (ie: we dont want to have an older event arrive after a newer one)
+// ^ (although websockets are TCP which might mean this is unfounded, but might still be worth it so we dont flood the client)
 redisSubscriber.subscribe('character:exp:update', async (message) => {
 	const data = JSON.parse(message) as CharacterExpUpdateEvent;
 	const userId = (
@@ -25,7 +35,7 @@ redisSubscriber.subscribe('character:exp:update', async (message) => {
 		console.log(`Sending exp update to user ${ws.data.userId}`);
 		ws.send(
 			JSON.stringify({
-				type: 'characterExpUpdate',
+				type: WebsocketMessageType.CHARACTER_EXP_UPDATE,
 				characterId: data.characterId,
 				exp: data.exp
 			} as CharacterExpUpdateMessage)
@@ -35,6 +45,7 @@ redisSubscriber.subscribe('character:exp:update', async (message) => {
 	}
 });
 
+// todo might be worth making redis event names type-safe
 redisSubscriber.subscribe('character:level:update', async (message) => {
 	const data = JSON.parse(message) as CharacterLevelUpdateEvent;
 	const userId = (
@@ -49,7 +60,7 @@ redisSubscriber.subscribe('character:level:update', async (message) => {
 		console.log(`Sending level update to user ${ws.data.userId}`);
 		ws.send(
 			JSON.stringify({
-				type: 'characterLevelUpdate',
+				type: WebsocketMessageType.CHARACTER_LEVEL_UPDATE,
 				characterId: data.characterId,
 				level: data.level
 			} as CharacterLevelUpdateMessage)

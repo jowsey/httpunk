@@ -1,7 +1,12 @@
 import type { schema } from '$lib/server/db';
 
+export const WebsocketMessageType = {
+	CHARACTER_EXP_UPDATE: 0,
+	CHARACTER_LEVEL_UPDATE: 1
+} as const;
+
 export interface WebsocketMessage {
-	type: string;
+	type: (typeof WebsocketMessageType)[keyof typeof WebsocketMessageType];
 }
 
 interface CharacterMessage extends WebsocketMessage {
@@ -9,11 +14,11 @@ interface CharacterMessage extends WebsocketMessage {
 }
 
 export interface CharacterExpUpdateMessage extends CharacterMessage {
-	type: 'characterExpUpdate';
+	type: typeof WebsocketMessageType.CHARACTER_EXP_UPDATE;
 	exp: number;
 }
 
 export interface CharacterLevelUpdateMessage extends CharacterMessage {
-	type: 'characterLevelUpdate';
+	type: typeof WebsocketMessageType.CHARACTER_LEVEL_UPDATE;
 	level: number;
 }

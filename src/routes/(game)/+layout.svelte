@@ -3,10 +3,11 @@
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
 	import { appState } from '$lib/client/state.svelte';
-	import type {
-		CharacterExpUpdateMessage,
-		CharacterLevelUpdateMessage,
-		WebsocketMessage
+	import {
+		WebsocketMessageType,
+		type CharacterExpUpdateMessage,
+		type CharacterLevelUpdateMessage,
+		type WebsocketMessage
 	} from '$lib/shared-types/websocket-message';
 	import NavButton from '$lib/components/NavButton.svelte';
 
@@ -38,28 +39,26 @@
 			console.log('[ws] message:', event.data);
 
 			const msgData = JSON.parse(event.data) as WebsocketMessage;
-			if (!msgData.type) {
-				console.warn('[ws] received message without type:', msgData);
-				return;
-			}
 
 			switch (msgData.type) {
-				case 'characterExpUpdate': {
+				case WebsocketMessageType.CHARACTER_EXP_UPDATE: {
 					const expUpdate = msgData as CharacterExpUpdateMessage;
 					if (expUpdate.characterId === appState.character?.id) {
 						appState.character.exp = expUpdate.exp;
 					}
 					break;
 				}
-				case 'characterLevelUpdate': {
+				case WebsocketMessageType.CHARACTER_LEVEL_UPDATE: {
 					const levelUpdate = msgData as CharacterLevelUpdateMessage;
 					if (levelUpdate.characterId === appState.character?.id) {
 						appState.character.level = levelUpdate.level;
 					}
 					break;
 				}
-				default:
+				default: {
 					console.warn(`[ws] unknown message type: ${msgData.type}`);
+					break;
+				}
 			}
 		};
 
@@ -108,12 +107,9 @@
 </div>
 
 <!-- main game content -->
-<OverlayScrollbarsComponent
-	options={{ scrollbars: { theme: 'os-theme-light', autoHide: 'move' } }}
-	class="mx-auto h-dvh w-full max-w-7xl overflow-y-auto px-4 py-16"
->
+<div class="mx-auto w-full max-w-7xl px-4 py-16">
 	{@render children()}
-</OverlayScrollbarsComponent>
+</div>
 
 <!-- bottom nav menu -->
 <div
