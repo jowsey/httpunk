@@ -10,8 +10,8 @@
 
 <div {...attribs} class={['flex flex-col', attribs.class]}>
 	<div class="flex items-center gap-x-4">
-		<EquipmentBox></EquipmentBox>
-		<EquipmentBox></EquipmentBox>
-		<EquipmentBox></EquipmentBox>
+		<EquipmentBox />
+		<EquipmentBox />
+		<EquipmentBox />
 	</div>
 </div>
