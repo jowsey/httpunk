@@ -17,7 +17,7 @@
 	let pronouns = $state(form?.pronouns || 'they');
 </script>
 
-<div class="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4">
+<div class="mx-auto flex min-h-full w-full max-w-3xl flex-1 flex-col px-4">
 	{#if !data.session}
 		<!-- logged-out landing page -->
 		<div class="m-auto w-60">
