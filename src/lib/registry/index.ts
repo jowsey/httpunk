@@ -1,4 +1,4 @@
-import type { ItemDef } from './defs';
+import type { ItemDef } from './types';
 import * as weapons from './items/weapons';
 import * as apparel from './items/apparel';
 
@@ -13,6 +13,8 @@ class Registry {
 		for (const item of Object.values(apparel)) {
 			this.registerItem(item);
 		}
+
+		console.log(`Registered ${Object.keys(weapons).length}x weapons, ${Object.keys(apparel).length}x apparel`);
 	}
 
 	registerItem(item: ItemDef) {
@@ -21,7 +23,6 @@ class Registry {
 		}
 
 		this.items.set(item.id, item);
-		console.log(`Registered item: ${item.id}`);
 	}
 
 	getItem(id: string): ItemDef | undefined {

@@ -1,4 +1,4 @@
-import type { ApparelDef } from '../defs';
+import type { ApparelDef } from '../types';
 
 export const shirt: ApparelDef = {
 	id: 'item.apparel.shirt',

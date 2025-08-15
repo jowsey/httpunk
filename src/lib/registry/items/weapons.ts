@@ -1,4 +1,4 @@
-import type { WeaponDef } from '../defs';
+import type { WeaponDef } from '../types';
 
 export const pistol: WeaponDef = {
 	id: 'item.weapon.pistol',
