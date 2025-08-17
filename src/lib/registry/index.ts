@@ -1,32 +1,45 @@
-import type { ItemDef } from './types';
+import type { JobDef, ItemDef } from './types';
 import * as weapons from './items/weapons';
 import * as apparel from './items/apparel';
+import * as jobs from './jobs/index';
 
 class Registry {
 	private items: Map<string, ItemDef> = new Map();
+	private jobs: Map<string, JobDef> = new Map();
 
 	constructor() {
-		for (const weapon of Object.values(weapons)) {
-			this.registerItem(weapon);
+		const weaponsList = Object.values(weapons);
+		const apparelList = Object.values(apparel);
+		const jobsList = Object.values(jobs);
+
+		const allIds = new Set<string>();
+		for (const item of [...weaponsList, ...apparelList, ...jobsList]) {
+			if (allIds.has(item.id)) {
+				throw new Error(`Duplicate registry ID found: ${item.id}`);
+			}
+
+			allIds.add(item.id);
 		}
 
-		for (const item of Object.values(apparel)) {
-			this.registerItem(item);
+		console.log('Registered:');
+
+		for (const weapon of weaponsList) {
+			this.items.set(weapon.id, weapon);
 		}
 
-		console.log(`Registered ${Object.keys(weapons).length}x weapons, ${Object.keys(apparel).length}x apparel`);
-	}
+		console.log(`- ${weaponsList.length}x\t weapons`);
 
-	registerItem(item: ItemDef) {
-		if (this.items.has(item.id)) {
-			throw new Error(`Item with id ${item.id} already exists in the registry!`);
+		for (const item of apparelList) {
+			this.items.set(item.id, item);
 		}
 
-		this.items.set(item.id, item);
-	}
+		console.log(`- ${apparelList.length}x\t apparel`);
 
-	getItem(id: string): ItemDef | undefined {
-		return this.items.get(id);
+		for (const job of jobsList) {
+			this.jobs.set(job.id, job);
+		}
+
+		console.log(`- ${jobsList.length}x\t jobs`);
 	}
 }
 

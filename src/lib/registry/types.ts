@@ -19,3 +19,10 @@ export interface ApparelDef extends ItemDef {
 		[slot in (typeof bodySlotsEnum.enumValues)[number]]?: number;
 	};
 }
+
+export interface JobDef {
+	id: string;
+	name: string;
+	description: string;
+	minLevel: number;
+}
