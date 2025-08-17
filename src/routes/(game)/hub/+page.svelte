@@ -10,19 +10,20 @@
 
 <div class="grid auto-rows-[192px] grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
 	<HubPanel
-		title="Gigs"
-		subtitle="Contact a fixer to find work"
+		title="Jobs"
+		subtitle="Take on work around the city"
 		background="render/briefcase_glass.webp"
 		backgroundHover="render/briefcase_glass_animated.webp"
+		href="/jobs"
 		class="col-span-2 row-span-2 lg:col-span-3"
 	/>
 
 	<HubPanel
 		title="Character"
-		subtitle="View and manage your character"
+		subtitle="Manage equipment and view stats"
 		background="render/heart_glass.webp"
-		class="col-span-1 row-span-2"
 		href="/character"
+		class="col-span-1 row-span-2"
 	/>
 
 	<div class="col-span-3 row-span-1 max-lg:hidden">

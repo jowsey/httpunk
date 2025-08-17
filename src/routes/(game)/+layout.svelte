@@ -72,14 +72,15 @@
 		<div class="flex items-center gap-x-2">
 			<NavButton icon="/svg/squares-four-fill.svg" href="/hub" label="Hub" />
 			<NavButton icon="/svg/person-arms-spread-fill.svg" href="/character" label="Character" />
+			<NavButton icon="/svg/handshake-fill.svg" href="/jobs" label="Jobs" />
 		</div>
 
 		<a
 			class={[
 				'group hover:bg-brand flex h-8 items-center justify-center gap-x-2 rounded-full border border-neutral-900 bg-neutral-950 px-[1px] transition-all duration-75 hover:text-neutral-900',
-				page.url.pathname === '/profile' && '!bg-brand !text-neutral-900'
+				page.url.pathname === '/settings' && '!bg-brand !text-neutral-900'
 			]}
-			href="/profile"
+			href="/settings"
 		>
 			<p class="pl-3.5 max-sm:hidden">{data.session?.user.name}</p>
 			<div class="size-7">

@@ -27,3 +27,4 @@
 </StyledButton>
 
 <p class="mt-2 text-sm text-neutral-500">Your progress will be saved.</p>
+<p class="text-right text-sm text-neutral-500">v{import.meta.env.VERSION}</p>
