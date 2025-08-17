@@ -28,7 +28,7 @@
 		<img
 			src={backgroundHover && isHovering ? backgroundHover : background}
 			alt="{title} background"
-			class={['absolute inset-0 -z-10 size-full rounded-3xl object-cover']}
+			class={['absolute inset-0 size-full rounded-3xl object-cover']}
 		/>
 	{/if}
 

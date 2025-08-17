@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async ({ locals, depends }) => {
 		return;
 	}
 
-	depends('app:session'); // invalidated in (game)/profile/+page.svelte on sign out
+	depends('app:session'); // invalidated in (game)/settings/+page.svelte on sign out
 
 	const characters = await db
 		.select()
