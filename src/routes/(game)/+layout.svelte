@@ -3,7 +3,7 @@
 	import { dev } from '$app/environment';
 	import { page } from '$app/state';
 	import { appState } from '$lib/client/state.svelte';
-	import { WebsocketClient } from '$lib/client/WebsocketHandler.svelte';
+	import { WebsocketClient } from '$lib/client/websocket-client.svelte';
 	import NavButton from '$lib/components/NavButton.svelte';
 
 	import 'overlayscrollbars/overlayscrollbars.css';
