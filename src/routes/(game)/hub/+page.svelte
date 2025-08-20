@@ -4,7 +4,7 @@
 </script>
 
 <div class="mb-8 flex items-center justify-between">
-	<p class="text-2xl font-bold">Welcome back, {appState.character!.name}.</p>
+	<p class="text-3xl font-bold">Welcome back, {appState.character!.name}.</p>
 	<p>this is some placeholder text</p>
 </div>
 

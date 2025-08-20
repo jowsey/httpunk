@@ -23,7 +23,7 @@
 </script>
 
 <div class="grid w-full grid-cols-1 items-center lg:grid-cols-3">
-	<p class="text-2xl font-bold">
+	<p class="text-3xl font-bold">
 		{appState.character!.name}
 		<PronounTag pronoun={appState.character!.pronouns} />
 	</p>
