@@ -30,6 +30,7 @@
 
 <!-- top header -->
 <div class="fixed top-0 z-40 w-full">
+	<!-- top glow line -->
 	<div class="absolute -top-8 left-0 z-50 h-8 w-full shadow-sm shadow-white/25"></div>
 	<div class="relative mb-8 h-8 bg-gradient-to-t from-transparent to-neutral-950 to-25%">
 		<!-- fades content below -->
@@ -66,7 +67,7 @@
 >
 	<div class="pointer-events-auto flex h-full items-center justify-end gap-x-4 px-4">
 		<p class="text-sm">
-			ws {ws?.readyState === WebSocket.OPEN ? 'connected' : 'disconnected'}
+			SOCKET {ws?.readyState === WebSocket.OPEN ? 'ONLINE' : 'OFFLINE'}
 		</p>
 
 		<div class="flex items-center gap-x-2">
