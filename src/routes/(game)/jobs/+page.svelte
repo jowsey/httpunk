@@ -45,13 +45,20 @@
 		camera.position.z = cameraLookAtTarget.z + Math.cos(time * cameraRotSpeed) * cameraRadius;
 		camera.lookAt(cameraLookAtTarget);
 
-		const width = mapContainer.clientWidth;
-		const height = mapContainer.clientHeight;
-		camera.aspect = width / height;
-		camera.updateProjectionMatrix();
+		const canvasWidth = renderer.domElement.width;
+		const canvasHeight = renderer.domElement.height;
 
-		renderer.setSize(width, height);
-		composer.setSize(width, height);
+		const containerWidth = mapContainer.clientWidth;
+		const containerHeight = mapContainer.clientHeight;
+
+		if (canvasWidth !== containerWidth || canvasHeight !== containerHeight) {
+			camera.aspect = containerWidth / containerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(containerWidth, containerHeight);
+			composer.setSize(containerWidth, containerHeight);
+		}
+
 		composer.render(deltaTime);
 	};
 
