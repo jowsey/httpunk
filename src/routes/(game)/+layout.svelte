@@ -41,7 +41,7 @@
 					<img
 						src="/favicon.png"
 						alt="httpunk logo"
-						class="drop-shadow-brand/25 hover:drop-shadow-brand/75 size-6 drop-shadow-sm"
+						class="drop-shadow-brand/25 hover:drop-shadow-brand/75 size-6 drop-shadow-sm select-none"
 					/>
 				</a>
 

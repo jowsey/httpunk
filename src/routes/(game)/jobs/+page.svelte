@@ -7,45 +7,23 @@
 	import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 	import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 	import { ViewportGizmo } from 'three-viewport-gizmo';
-	import { onMount } from 'svelte';
 	import { dev } from '$app/environment';
+	import { onMount } from 'svelte';
+	import { districts, type MapCameraState } from '$lib/client/map-data';
 
-	interface DistrictInfo {
-		color: number;
-		points: THREE.Vector2[];
-	}
-
-	const cameraRotSpeed = 0.1;
+	const cameraRotSpeed = -0.1;
 	const cameraStartingHeight = 3000;
 	const cameraStartingRadius = 2500;
-	const cameraLookAtTarget = new THREE.Vector3(0, 100, 0);
-	const cameraFov = 55;
+	const cameraFov = 40;
 	const hologramOpacity = 0.35;
-
-	const districts: DistrictInfo[] = [
-		{
-			color: 0x55ff55,
-			points: [
-				new THREE.Vector2(1500, -2000),
-				new THREE.Vector2(2250, -1250),
-				new THREE.Vector2(1725, -475),
-				new THREE.Vector2(2100, 50),
-				new THREE.Vector2(2000, 700),
-				new THREE.Vector2(1000, 1150),
-				new THREE.Vector2(650, 1100),
-				new THREE.Vector2(800, 175),
-				new THREE.Vector2(-50, -800),
-				new THREE.Vector2(375, -1425)
-			]
-		}
-	];
+	const enableDevTools = false;
 
 	let renderer: THREE.WebGLRenderer;
 	let camera: THREE.PerspectiveCamera;
 	let scene: THREE.Scene;
 	let composer: EffectComposer;
 	let controls: OrbitControls;
-	let gizmo: ViewportGizmo;
+	let gizmo: ViewportGizmo | undefined;
 
 	let mapContainer: HTMLDivElement;
 	let mapCanvas: HTMLCanvasElement;
@@ -81,12 +59,12 @@
 
 			camera.aspect = containerWidth / containerHeight;
 			camera.updateProjectionMatrix();
-			gizmo.update();
+			gizmo?.update();
 		}
 
 		controls.update(deltaTime);
 		composer.render(deltaTime);
-		gizmo.render();
+		gizmo?.render();
 	};
 
 	onMount(() => {
@@ -123,44 +101,47 @@
 		// District overlays
 		const overlayGroup = new THREE.Group();
 		overlayGroup.name = 'districtOverlays';
-		overlayGroup.renderOrder = 1;
+		overlayGroup.renderOrder = -1;
 		scene.add(overlayGroup);
 
-		const overlayMaterial = new THREE.MeshBasicMaterial({
+		const overlayMaterial = new THREE.MeshPhysicalMaterial({
+			metalness: 0.5,
 			transparent: true,
-			opacity: 0.25,
-			side: THREE.DoubleSide,
+			opacity: 0.5,
+			side: THREE.BackSide,
 			depthWrite: false
 		});
 
+		const cornerRadius = 50;
+		const insetDistance = 8;
+
 		for (const district of districts) {
 			const shape = new THREE.Shape();
-			const points = district.points;
-			const curveRadius = 32;
+			let points = district.points;
 
-			shape.moveTo(points[0].x, points[0].y);
-			for (let i = 1; i < points.length + 1; i++) {
-				const p0 = points[(i - 1) % points.length];
-				const p1 = points[i % points.length];
-				const p2 = points[(i + 1) % points.length];
+			const centroid = points.reduce((acc, p) => acc.add(p), new THREE.Vector2()).divideScalar(points.length);
+			points = points.map((p) => p.clone().sub(p.clone().sub(centroid).normalize().multiplyScalar(insetDistance)));
 
-				const v0 = new THREE.Vector2().subVectors(p1, p0).normalize();
-				const v1 = new THREE.Vector2().subVectors(p2, p1).normalize();
+			points.forEach((point, i) => {
+				const prev = points[(i - 1 + points.length) % points.length];
+				const next = points[(i + 1) % points.length];
 
-				const angle = Math.acos(THREE.MathUtils.clamp(v0.dot(v1), -1, 1));
-				const distance = curveRadius / Math.tan(angle / 2);
+				const cornerStart = point.clone().add(prev.clone().sub(point).normalize().multiplyScalar(cornerRadius));
+				const cornerEnd = point.clone().add(next.clone().sub(point).normalize().multiplyScalar(cornerRadius));
 
-				const start = new THREE.Vector2().copy(p1).sub(v0.multiplyScalar(distance));
-				const end = new THREE.Vector2().copy(p1).add(v1.multiplyScalar(distance));
+				if (i === 0) {
+					shape.moveTo(cornerStart.x, cornerStart.y);
+				} else {
+					shape.lineTo(cornerStart.x, cornerStart.y);
+				}
 
-				shape.lineTo(start.x, start.y);
-				shape.quadraticCurveTo(p1.x, p1.y, end.x, end.y);
-			}
+				shape.quadraticCurveTo(point.x, point.y, cornerEnd.x, cornerEnd.y);
+			});
 
 			const geometry = new THREE.ShapeGeometry(shape);
 			geometry.rotateX(Math.PI / 2);
 
-			const overlayMesh = new THREE.Mesh(geometry, overlayMaterial);
+			const overlayMesh = new THREE.Mesh(geometry, overlayMaterial.clone());
 			overlayMesh.material.color.set(district.color);
 			overlayGroup.add(overlayMesh);
 		}
@@ -179,42 +160,58 @@
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
 		// Camera
-		camera = new THREE.PerspectiveCamera(cameraFov, mapContainer.clientWidth / mapContainer.clientHeight, 0.1, 100_000);
+		camera = new THREE.PerspectiveCamera(
+			cameraFov,
+			mapContainer.clientWidth / mapContainer.clientHeight,
+			0.1,
+			1_000_000
+		);
 
 		controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
+		controls.minDistance = 1000;
+		controls.maxDistance = 5000;
+		controls.maxTargetRadius = 5000;
+		controls.maxPolarAngle = Math.PI / 2 - 0.35;
 		controls.screenSpacePanning = false;
 		controls.mouseButtons = {
 			LEFT: THREE.MOUSE.PAN,
 			MIDDLE: THREE.MOUSE.DOLLY,
 			RIGHT: THREE.MOUSE.ROTATE
 		};
-		// controls.autoRotate = true;
+		controls.autoRotate = true;
 		controls.autoRotateSpeed = cameraRotSpeed;
 		controls.zoomToCursor = true;
-		controls.update();
 
-		let mapCameraPosition = JSON.parse(localStorage.getItem('mapCameraPosition') || 'null');
-		let mapCameraRotation = JSON.parse(localStorage.getItem('mapCameraRotation') || 'null');
-		let mapCameraTarget = JSON.parse(localStorage.getItem('mapCameraTarget') || 'null');
+		const mapCamera = JSON.parse(localStorage.getItem('mapCamera') || 'null') as MapCameraState | null;
 
-		if (mapCameraPosition && mapCameraRotation && mapCameraTarget) {
-			camera.position.copy(mapCameraPosition);
-			camera.setRotationFromQuaternion(mapCameraRotation);
-			controls.target.copy(mapCameraTarget);
+		if (mapCamera?.position && mapCamera?.rotation && mapCamera?.target) {
+			controls.target.copy(mapCamera.target);
+			camera.position.copy(mapCamera.position);
+			camera.setRotationFromQuaternion(mapCamera.rotation);
 		} else {
-			camera.position.x = -cameraStartingRadius;
-			camera.position.y = cameraStartingHeight;
-			camera.position.z = cameraStartingRadius;
-			camera.lookAt(cameraLookAtTarget);
+			const center = districts[0].points
+				.reduce((acc, p) => acc.add(p), new THREE.Vector2())
+				.divideScalar(districts[0].points.length);
+			const center3D = new THREE.Vector3(center.x, 0, center.y);
+			const offset = new THREE.Vector3(-cameraStartingRadius, cameraStartingHeight, cameraStartingRadius);
+
+			controls.target.copy(center3D);
+			camera.position.copy(center3D.clone().add(offset));
+			camera.lookAt(center.x, 100, center.y);
 		}
 
-		if (dev) {
-			const gridSize = 10_000;
-			const unitsPerSegment = 500;
-			const gridHelper = new THREE.GridHelper(gridSize, gridSize / unitsPerSegment);
-			scene.add(gridHelper);
+		controls.update();
 
+		const gridSize = 10_000;
+		const unitsPerSegment = 100;
+		const gridHelper = new THREE.GridHelper(gridSize, gridSize / unitsPerSegment);
+		gridHelper.material.transparent = true;
+		gridHelper.material.opacity = 0.1;
+		gridHelper.position.set(0, -1, 0);
+		scene.add(gridHelper);
+
+		if (dev && enableDevTools) {
 			gizmo = new ViewportGizmo(camera, renderer);
 			gizmo.attachControls(controls);
 		}
@@ -231,9 +228,14 @@
 		composer.addPass(outputPass);
 
 		const saveCameraState = () => {
-			localStorage.setItem('mapCameraPosition', JSON.stringify(camera.position));
-			localStorage.setItem('mapCameraRotation', JSON.stringify(camera.quaternion));
-			localStorage.setItem('mapCameraTarget', JSON.stringify(controls.target));
+			localStorage.setItem(
+				'mapCamera',
+				JSON.stringify({
+					position: camera.position,
+					rotation: camera.quaternion,
+					target: controls.target
+				} as MapCameraState)
+			);
 		};
 
 		window.addEventListener('beforeunload', saveCameraState);
@@ -251,11 +253,11 @@
 
 			renderer.setAnimationLoop(null);
 
+			gizmo?.dispose();
+			controls.dispose();
 			scene.clear();
 			renderer.dispose();
 			composer.dispose();
-			controls.dispose();
-			gizmo.dispose();
 		};
 	});
 </script>
@@ -264,6 +266,6 @@
 	<canvas bind:this={mapCanvas}></canvas>
 </div>
 
-<div class="w-fit bg-neutral-950/85 px-6 py-2">
+<div class="w-fit bg-neutral-950/85 px-6 py-2 select-none">
 	<p class="text-3xl font-bold">Jobs</p>
 </div>
