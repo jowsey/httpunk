@@ -28,13 +28,13 @@
 			points: [
 				new THREE.Vector2(1500, -2000),
 				new THREE.Vector2(2250, -1250),
-				new THREE.Vector2(1750, -500),
+				new THREE.Vector2(1725, -475),
 				new THREE.Vector2(2100, 50),
 				new THREE.Vector2(2000, 700),
 				new THREE.Vector2(1000, 1150),
-				new THREE.Vector2(675, 1100),
-				new THREE.Vector2(775, 250),
-				new THREE.Vector2(0, -900),
+				new THREE.Vector2(650, 1100),
+				new THREE.Vector2(800, 175),
+				new THREE.Vector2(-50, -800),
 				new THREE.Vector2(375, -1425)
 			]
 		}
@@ -136,7 +136,7 @@
 		for (const district of districts) {
 			const shape = new THREE.Shape();
 			const points = district.points;
-			const curveRadius = 64;
+			const curveRadius = 32;
 
 			shape.moveTo(points[0].x, points[0].y);
 			for (let i = 1; i < points.length + 1; i++) {
