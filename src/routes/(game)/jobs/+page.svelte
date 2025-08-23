@@ -149,7 +149,7 @@
 		// Renderer
 		renderer = new THREE.WebGLRenderer({
 			alpha: true,
-			antialias: true,
+			// antialias: true, // seemingly does nothing when using EffectComposer: set through composer instead
 			canvas: mapCanvas,
 			logarithmicDepthBuffer: true
 		});
@@ -220,6 +220,9 @@
 		composer = new EffectComposer(renderer);
 		composer.setSize(mapContainer.clientWidth, mapContainer.clientHeight);
 		composer.setPixelRatio(window.devicePixelRatio);
+
+		composer.renderTarget1.samples = 4; // MSAA samples
+		composer.renderTarget2.samples = 4; // seems like it switches between targets with HMR? might be going crazy
 
 		const renderPass = new RenderPass(scene, camera);
 		composer.addPass(renderPass);
