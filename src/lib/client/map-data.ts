@@ -7,13 +7,17 @@ export interface MapCameraState {
 }
 
 export interface DistrictInfo {
+	name: string;
 	color: number;
+	levelRange: [number, number];
 	points: THREE.Vector2[];
 }
 
 export const districts: DistrictInfo[] = [
 	{
+		name: 'Haven',
 		color: 0xa3e635,
+		levelRange: [1, 25],
 		points: [
 			new THREE.Vector2(1500, -2000),
 			new THREE.Vector2(2250, -1250),
@@ -28,7 +32,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'North Central',
 		color: 0x86efac,
+		levelRange: [26, 50],
 		points: [
 			new THREE.Vector2(0, -875),
 			new THREE.Vector2(800, 175),
@@ -49,7 +55,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'The Docks',
 		color: 0xfde047,
+		levelRange: [51, 75],
 		points: [
 			new THREE.Vector2(-2050, -1425),
 			new THREE.Vector2(-2750, -1975),
@@ -68,7 +76,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'Old Square',
 		color: 0xfdba74,
+		levelRange: [76, 100],
 		points: [
 			new THREE.Vector2(1000, -3200),
 			new THREE.Vector2(1275, -2575),
@@ -87,7 +97,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'Eastside',
 		color: 0xf87171,
+		levelRange: [101, 125],
 		points: [
 			new THREE.Vector2(2250, -1250),
 			new THREE.Vector2(2950, -1275),
@@ -103,7 +115,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'Riverfront',
 		color: 0xdc2626,
+		levelRange: [126, 150],
 		points: [
 			new THREE.Vector2(1500, 2300),
 			new THREE.Vector2(2000, 1800),
@@ -114,7 +128,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'The Strip',
 		color: 0x991b1b,
+		levelRange: [151, 175],
 		points: [
 			new THREE.Vector2(-500, 2700),
 			new THREE.Vector2(1500, 2300),
@@ -123,7 +139,9 @@ export const districts: DistrictInfo[] = [
 		]
 	},
 	{
+		name: 'South Central',
 		color: 0x880909,
+		levelRange: [176, 200],
 		points: [
 			new THREE.Vector2(-4500, 4500),
 			new THREE.Vector2(-4500, 2500),

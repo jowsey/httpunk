@@ -10,6 +10,7 @@
 	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
 	import { districts, type MapCameraState } from '$lib/client/map-data';
+	import { generateDistrictShape, generateDistrictTexture } from '$lib/client/utils/map';
 
 	const cameraRotSpeed = -0.1;
 	const cameraStartingHeight = 3000;
@@ -104,6 +105,11 @@
 		overlayGroup.renderOrder = -1;
 		scene.add(overlayGroup);
 
+		const labelGroup = new THREE.Group();
+		labelGroup.name = 'districtLabels';
+		labelGroup.renderOrder = 1;
+		scene.add(labelGroup);
+
 		const overlayMaterial = new THREE.MeshPhysicalMaterial({
 			metalness: 0.5,
 			transparent: true,
@@ -112,31 +118,10 @@
 			depthWrite: false
 		});
 
-		const cornerRadius = 50;
-		const insetDistance = 8;
+		const districtLabelScale = 0.8;
 
 		for (const district of districts) {
-			const shape = new THREE.Shape();
-			let points = district.points;
-
-			const centroid = points.reduce((acc, p) => acc.add(p), new THREE.Vector2()).divideScalar(points.length);
-			points = points.map((p) => p.clone().sub(p.clone().sub(centroid).normalize().multiplyScalar(insetDistance)));
-
-			points.forEach((point, i) => {
-				const prev = points[(i - 1 + points.length) % points.length];
-				const next = points[(i + 1) % points.length];
-
-				const cornerStart = point.clone().add(prev.clone().sub(point).normalize().multiplyScalar(cornerRadius));
-				const cornerEnd = point.clone().add(next.clone().sub(point).normalize().multiplyScalar(cornerRadius));
-
-				if (i === 0) {
-					shape.moveTo(cornerStart.x, cornerStart.y);
-				} else {
-					shape.lineTo(cornerStart.x, cornerStart.y);
-				}
-
-				shape.quadraticCurveTo(point.x, point.y, cornerEnd.x, cornerEnd.y);
-			});
+			const [shape, centroid] = generateDistrictShape(district, 50, 8);
 
 			const geometry = new THREE.ShapeGeometry(shape);
 			geometry.rotateX(Math.PI / 2);
@@ -144,6 +129,14 @@
 			const overlayMesh = new THREE.Mesh(geometry, overlayMaterial.clone());
 			overlayMesh.material.color.set(district.color);
 			overlayGroup.add(overlayMesh);
+
+			const texture = generateDistrictTexture(district);
+
+			const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+			const sprite = new THREE.Sprite(spriteMaterial);
+			sprite.position.set(centroid.x, 100, centroid.y);
+			sprite.scale.set(texture.width, texture.height, 1).multiplyScalar(districtLabelScale);
+			labelGroup.add(sprite);
 		}
 
 		// Renderer
@@ -160,12 +153,7 @@
 		renderer.toneMapping = THREE.ACESFilmicToneMapping;
 
 		// Camera
-		camera = new THREE.PerspectiveCamera(
-			cameraFov,
-			mapContainer.clientWidth / mapContainer.clientHeight,
-			0.1,
-			1_000_000
-		);
+		camera = new THREE.PerspectiveCamera(cameraFov, mapContainer.clientWidth / mapContainer.clientHeight, 0.1, 100_000);
 
 		controls = new OrbitControls(camera, renderer.domElement);
 		controls.enableDamping = true;
@@ -207,6 +195,7 @@
 		const unitsPerSegment = 100;
 		const gridHelper = new THREE.GridHelper(gridSize, gridSize / unitsPerSegment);
 		gridHelper.material.transparent = true;
+		gridHelper.material.depthWrite = false;
 		gridHelper.material.opacity = 0.1;
 		gridHelper.position.set(0, -1, 0);
 		scene.add(gridHelper);
@@ -248,7 +237,7 @@
 			saveCameraState();
 
 			scene.traverse((child) => {
-				if (child instanceof THREE.Mesh) {
+				if (child instanceof THREE.Mesh || child instanceof THREE.Sprite) {
 					child.geometry.dispose();
 					child.material.dispose();
 				}
