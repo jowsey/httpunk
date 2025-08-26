@@ -101,17 +101,17 @@ export const districts: DistrictInfo[] = [
 		color: 0xf87171,
 		levelRange: [101, 125],
 		points: [
-			new THREE.Vector2(2250, -1250),
-			new THREE.Vector2(2950, -1275),
-			new THREE.Vector2(3775, -450),
-			new THREE.Vector2(4500, -450),
-			new THREE.Vector2(4500, -4500),
-			new THREE.Vector2(1000, -4500),
-			new THREE.Vector2(1000, -3200),
-			new THREE.Vector2(1275, -2575),
-			new THREE.Vector2(1275, -2075),
+			new THREE.Vector2(1500, -2000),
 			new THREE.Vector2(1400, -1950),
-			new THREE.Vector2(1500, -2000)
+			new THREE.Vector2(1275, -2075),
+			new THREE.Vector2(1275, -2575),
+			new THREE.Vector2(1000, -3200),
+			new THREE.Vector2(1000, -4500),
+			new THREE.Vector2(4500, -4500),
+			new THREE.Vector2(4500, -450),
+			new THREE.Vector2(3775, -450),
+			new THREE.Vector2(2950, -1275),
+			new THREE.Vector2(2250, -1250)
 		]
 	},
 	{
