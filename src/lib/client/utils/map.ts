@@ -1,5 +1,38 @@
 import type { DistrictInfo } from '../map-data';
 import * as THREE from 'three';
+import offsetPolygon from 'offset-polygon';
+
+const computeArithmeticMean = (pts: THREE.Vector2[]): THREE.Vector2 => {
+	const sum = pts.reduce((acc, pt) => acc.add(pt), new THREE.Vector2(0, 0));
+	return sum.divideScalar(pts.length);
+};
+
+const computePolygonCentroid = (pts: THREE.Vector2[]): THREE.Vector2 => {
+	if (pts.length === 0) return new THREE.Vector2(0, 0);
+
+	// points/lines fallback
+	if (pts.length < 3) return computeArithmeticMean(pts);
+
+	let area = 0;
+	let cx = 0;
+	let cy = 0;
+
+	for (let i = 0; i < pts.length; i++) {
+		const curr = pts[i];
+		const next = pts[(i + 1) % pts.length];
+		const cross = curr.x * next.y - next.x * curr.y;
+
+		area += cross;
+		cx += (curr.x + next.x) * cross;
+		cy += (curr.y + next.y) * cross;
+	}
+
+	// degenerate polygon fallback
+	if (Math.abs(area) < 1e-8) return computeArithmeticMean(pts);
+
+	const scale = 1 / (3 * area);
+	return new THREE.Vector2(cx * scale, cy * scale);
+};
 
 export const generateDistrictShape = (
 	district: DistrictInfo,
@@ -9,8 +42,10 @@ export const generateDistrictShape = (
 	const shape = new THREE.Shape();
 	let points = district.points;
 
-	const centroid = points.reduce((acc, p) => acc.add(p), new THREE.Vector2()).divideScalar(points.length);
-	points = points.map((p) => p.clone().sub(p.clone().sub(centroid).normalize().multiplyScalar(insetDistance)));
+	const offsetPoints = offsetPolygon(points, -insetDistance);
+	points = offsetPoints.map((p) => new THREE.Vector2(p.x, p.y));
+
+	const centroid = computePolygonCentroid(points);
 
 	points.forEach((point, i) => {
 		const prev = points[(i - 1 + points.length) % points.length];
