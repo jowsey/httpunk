@@ -6,8 +6,6 @@
 	import { WebsocketClient } from '$lib/client/websocket-client.svelte';
 	import NavButton from '$lib/components/NavButton.svelte';
 
-	import 'overlayscrollbars/overlayscrollbars.css';
-
 	const { children, data } = $props();
 
 	appState.character = data.character;
