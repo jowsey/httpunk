@@ -1,15 +1,7 @@
-import { createClient } from 'redis';
+import { RedisClient } from 'bun';
 
-export const redisSubscriber = createClient({
-	url: process.env.REDIS_URL
-});
-
-export const redisPublisher = createClient({
-	url: process.env.REDIS_URL
-});
-
-redisSubscriber.on('error', (err) => console.error('Redis subscriber error:', err));
-redisPublisher.on('error', (err) => console.error('Redis publisher error:', err));
+export const redisSubscriber = new RedisClient(process.env.REDIS_URL);
+export const redisPublisher = new RedisClient(process.env.REDIS_URL);
 
 await redisSubscriber.connect();
 await redisPublisher.connect();
