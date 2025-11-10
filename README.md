@@ -4,7 +4,7 @@
 
 <h1>httpunk</h1>
 <p>A Cyberpunk-themed web-game.</p>
-<img alt="a screenshot of a 3D-rendered city map with glowing blue buildings in an area labelled &quot;South Central&quot;" src=".github/map-screenshot.png">
+<img alt="a screenshot of a 3D-rendered city map with glowing blue buildings in an area labelled &quot;South Central&quot;" src=".github/map-screenshot.webp">
 </div>
 
 ## Setup
